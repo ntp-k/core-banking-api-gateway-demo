@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: core-bank
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: old-core
+  namespace: core-bank
+  labels:
+    app: old-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: old-core
+  template:
+    metadata:
+      labels:
+        app: old-core
+    spec:
+      containers:
+        - name: old-core
+          image: quay.io/natthaphat_k/old-core-plaintext
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: old-core-svc
+  namespace: core-bank
+spec:
+  selector:
+    app: old-core
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: old-core-rt
+  namespace: core-bank
+spec:
+  to:
+    kind: Service
+    name: old-core-svc
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: new-core
+  namespace: core-bank
+  labels:
+    app: new-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: new-core
+  template:
+    metadata:
+      labels:
+        app: new-core
+    spec:
+      containers:
+        - name: new-core
+          image: quay.io/natthaphat_k/new-core-json
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: new-core-svc
+  namespace: core-bank
+spec:
+  selector:
+    app: new-core
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: new-core-rt
+  namespace: core-bank
+spec:
+  to:
+    kind: Service
+    name: new-core-svc
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
