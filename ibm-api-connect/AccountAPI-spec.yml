@@ -1,0 +1,29 @@
+openapi: 3.0.1
+info:
+  title: Account API
+  description: >
+    API to retrieve account information from core banking systems (old core or
+    new core).
+  version: 1.0.0
+  contact:
+    name: Core Banking API Team
+    email: corebank-api@bank.example
+tags:
+  - name: Account
+    description: Account inquiry operations
+servers:
+  - url: /account
+paths:
+  /balance:
+    summary: ''
+    description: ''
+    get:
+      responses:
+        '200':
+          description: Account balance retrieved successfully
+      tags:
+        - Account
+      summary: Check account balance
+      description: Returns the current balance for a given account ID.
+      operationId: checkBalance
+

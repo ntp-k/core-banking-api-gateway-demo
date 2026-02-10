@@ -1,0 +1,14 @@
+kind: Product
+apiVersion: api.ibm.com/v1
+metadata:
+  name: AccountProduct
+  namespace: core-banking-v2
+  version: '1.0'
+  tags:
+    - core
+    - account
+spec:
+  plans:
+    - $ref: core-banking-v2:Free:1.0
+  apis:
+    - $ref: core-banking-v2:AccountAPI:1.0
