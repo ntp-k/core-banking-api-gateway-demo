@@ -10,12 +10,13 @@ def root():
 @app.get("/accounts/{account_id}/balance")
 def get_balance(account_id: str = "123456789"):
     bangkok_tz = timezone(timedelta(hours=7))
+    acct = account_id.ljust(9, '0')
 
-    return {
+    res = {
     "code": "00",
     "msg": "SUCCESS",
-    "acctId": account_id,
-    "availBal": 10500,
+    "acctId": acct,
+    "availBal": 10500.99,
     "curr": "THB",
     "lastUpd": datetime(
         2026, 2, 6, 15, 30, 0,
@@ -23,5 +24,8 @@ def get_balance(account_id: str = "123456789"):
     ).isoformat(),
     "coreId": "NEW"
 }
+
+    print('Response:', res)
+    return res
 
 # EOF
