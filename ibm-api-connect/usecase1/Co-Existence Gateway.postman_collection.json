@@ -1,0 +1,262 @@
+{
+	"info": {
+		"_postman_id": "1460e817-b03d-43b4-a2b8-a3b94af7207a",
+		"name": "Co-Existence Gateway",
+		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "52551103",
+		"_collection_link": "https://natthaphat-k-4155420.postman.co/workspace/Ntp's-Workspace~43dcaa6d-03ec-42f1-8f34-39e743ac4ae8/collection/52551103-1460e817-b03d-43b4-a2b8-a3b94af7207a?action=share&source=collection_link&creator=52551103"
+	},
+	"item": [
+		{
+			"name": "case1.1 - old 1 to 1 (success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{GatewayURL}}/singleInquery/{{ValidAccountId}}",
+					"host": [
+						"{{GatewayURL}}"
+					],
+					"path": [
+						"singleInquery",
+						"{{ValidAccountId}}"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "case1.2 - old 1 to 5 (success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{GatewayURL}}/multipleInquery/{{ValidAccountId}}",
+					"host": [
+						"{{GatewayURL}}"
+					],
+					"path": [
+						"multipleInquery",
+						"{{ValidAccountId}}"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "case1.7 - new 1 to 1 (success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{GatewayURL}}/singleInquery/{{ValidAccountId}}",
+					"host": [
+						"{{GatewayURL}}"
+					],
+					"path": [
+						"singleInquery",
+						"{{ValidAccountId}}"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "case1.6 - old 1 to 3 update (2 of 3 error)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"BillerId\": {{InvalidAccountId}},\n  \"BillerName\": \"TrueMove H\",\n  \"CustomerRefNumber\": \"3689942\",\n  \"Amount\": {\n    \"Amount\": \"99\",\n    \"Currency\": \"THB\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{GatewayURL}}/wrongUpdate",
+					"host": [
+						"{{GatewayURL}}"
+					],
+					"path": [
+						"wrongUpdate"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "case1.5 - old 1 to 3 update (success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"BillerId\": {{ValidAccountId}},\n  \"BillerName\": \"TrueMove H\",\n  \"CustomerRefNumber\": \"3689942\",\n  \"Amount\": {\n    \"Amount\": \"99\",\n    \"Currency\": \"THB\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{GatewayURL}}/update",
+					"host": [
+						"{{GatewayURL}}"
+					],
+					"path": [
+						"update"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "case1.10 - new 1 to 1 update (success)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"BillerId\": {{ValidAccountId}},\n  \"BillerName\": \"TrueMove H\",\n  \"CustomerRefNumber\": \"3689942\",\n  \"Amount\": {\n    \"Amount\": \"99\",\n    \"Currency\": \"THB\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{GatewayURL}}/update",
+					"host": [
+						"{{GatewayURL}}"
+					],
+					"path": [
+						"update"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
