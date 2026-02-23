@@ -1,0 +1,13 @@
+kind: API
+apiVersion: api.ibm.com/v1
+metadata:
+  name: co-existence
+  namespace: core-bank-gateway
+  version: '1.0'
+  tags: []
+  type: REST
+spec:
+  api-spec:
+    $path: ./co-existence-spec.yml
+  policy-sequence:
+    - $ref: core-bank-gateway:coe-canary:1.0

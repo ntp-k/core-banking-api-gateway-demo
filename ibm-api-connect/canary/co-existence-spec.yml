@@ -1,0 +1,99 @@
+openapi: 3.0.1
+info:
+  title: co-existence endpoints
+  version: 1.0.0
+servers:
+  - url: /co-existence
+paths:
+  /singleInquery/{AccountId}:
+    get:
+      summary: ''
+      description: ''
+      operationId: getSingleInquiry
+      parameters:
+        - name: AccountId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 9
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /multipleInquery/{AccountId}:
+    get:
+      summary: ''
+      description: ''
+      operationId: getMultipleInquery
+      parameters:
+        - name: AccountId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 9
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /wrongInquery/{AccountId}:
+    get:
+      summary: ''
+      description: ''
+      operationId: getWrongInquery
+      parameters:
+        - name: AccountId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 9
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /timeoutOldCore/{AccountId}:
+    get:
+      summary: ''
+      description: ''
+      operationId: getTimeoutOldCoreInquery
+      parameters:
+        - name: AccountId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 9
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /update:
+    summary: ''
+    description: ''
+    post:
+      summary: ''
+      description: ''
+      operationId: postUpdate
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /wrongUpdate:
+    summary: ''
+    description: ''
+    post:
+      summary: ''
+      description: ''
+      operationId: postWrongUpdate
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized

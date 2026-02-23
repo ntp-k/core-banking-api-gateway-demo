@@ -1,0 +1,227 @@
+kind: DataPowerAssembly
+apiVersion: api.ibm.com/v1
+metadata:
+  name: coe-canary
+  namespace: core-bank-gateway
+  version: '1.0'
+  tags: []
+  labels:
+    gatewayTypes:
+      - datapower
+spec:
+  x-ibm-configuration:
+    enforced: true
+    testable: true
+    phase: realized
+    gateway: datapower-api-gateway
+    assembly:
+      execute:
+        - set-variable:
+            version: 2.0.0
+            title: config target core
+            actions:
+              - set: newCorePercentage
+                value: '100'
+                type: string
+        - gatewayscript:
+            version: 2.0.0
+            title: decide target core
+            source: |-
+              var newCorePctRaw = context.get('newCorePercentage');
+
+              // convert to number and validate
+              var newCore = parseInt(newCorePctRaw, 10);
+              if (isNaN(newCore) || newCore < 0 || newCore > 100) {
+                pct = 0; // fail-safe -> route to old core
+              }
+
+              // random integer 1 - 100
+              var r = Math.floor(Math.random() * 100) + 1;
+
+              // routing decision
+              var targetCore = 'old'
+              if (r <= newCore) {
+                targetCore = 'new'
+              }
+
+              context.message.header.set('target-r', r);
+              context.message.header.set('target-core', targetCore);
+
+              // var res = { "context": context };
+              // context.message.body.write(res);
+              // context.message.header.set('Content-Type', "application/json");
+        - switch:
+            version: 2.1.0
+            title: switch for target core
+            case:
+              - condition: $header("target-core")="old"
+                execute:
+                  - switch:
+                      version: 2.1.0
+                      title: switch for method
+                      case:
+                        - condition: $httpVerb()="GET"
+                          execute:
+                            - invoke:
+                                version: 2.3.0
+                                title: invoke
+                                backend-type: detect
+                                header-control:
+                                  type: blocklist
+                                  values: []
+                                parameter-control:
+                                  type: allowlist
+                                  values: []
+                                http-version: HTTP/1.1
+                                timeout: 60
+                                verb: keep
+                                chunked-uploads: true
+                                persistent-connection: true
+                                cache-response: protocol
+                                cache-ttl: 900
+                                websocket-upgrade: false
+                                target-url: >-
+                                  http://wm-is-http-webmethods.apps.itz-ycynma.infra01-lb.dal14.techzone.ibm.com/RouterRad$(api.operation.path)?target=ON
+                                graphql-send-type: detect
+                            - set-variable:
+                                version: 2.0.0
+                                title: set res header core old
+                                actions:
+                                  - set: message.headers.target-core
+                                    value: old
+                                    type: string
+                        - condition: $httpVerb()="POST"
+                          execute:
+                            - set-variable:
+                                version: 2.0.0
+                                title: set req header core old
+                                actions:
+                                  - set: message.headers.target
+                                    value: 'ON'
+                                    type: string
+                            - invoke:
+                                version: 2.3.0
+                                title: invoke
+                                backend-type: detect
+                                header-control:
+                                  type: blocklist
+                                  values: []
+                                parameter-control:
+                                  type: allowlist
+                                  values: []
+                                http-version: HTTP/1.1
+                                timeout: 60
+                                verb: keep
+                                chunked-uploads: true
+                                persistent-connection: true
+                                cache-response: protocol
+                                cache-ttl: 900
+                                websocket-upgrade: false
+                                target-url: >-
+                                  http://wm-is-http-webmethods.apps.itz-ycynma.infra01-lb.dal14.techzone.ibm.com/RouterRad$(api.operation.path)
+                                graphql-send-type: detect
+                            - set-variable:
+                                version: 2.0.0
+                                title: set res header core old
+                                actions:
+                                  - set: message.headers.target-core
+                                    value: old
+                                    type: string
+                        - otherwise:
+                            - throw:
+                                version: 2.1.0
+                                title: throw invalid method
+                                name: invalid method
+                                error-status-code: '405'
+                                error-status-reason: Method Not Allowed
+                                message: Only allow GET and POST
+              - condition: $header("target-core")="new"
+                execute:
+                  - switch:
+                      version: 2.1.0
+                      title: switch
+                      case:
+                        - condition: $httpVerb()="GET"
+                          execute:
+                            - invoke:
+                                version: 2.3.0
+                                title: invoke
+                                backend-type: detect
+                                header-control:
+                                  type: blocklist
+                                  values: []
+                                parameter-control:
+                                  type: allowlist
+                                  values: []
+                                http-version: HTTP/1.1
+                                timeout: 60
+                                verb: keep
+                                chunked-uploads: true
+                                persistent-connection: true
+                                cache-response: protocol
+                                cache-ttl: 900
+                                websocket-upgrade: false
+                                target-url: >-
+                                  http://wm-is-http-webmethods.apps.itz-ycynma.infra01-lb.dal14.techzone.ibm.com/RouterRad$(api.operation.path)?target=OFF
+                                graphql-send-type: detect
+                            - set-variable:
+                                version: 2.0.0
+                                title: set res header core new
+                                actions:
+                                  - set: message.headers.target-core
+                                    value: new
+                                    type: string
+                        - condition: $httpVerb()="POST"
+                          execute:
+                            - set-variable:
+                                version: 2.0.0
+                                title: set req header core new
+                                actions:
+                                  - set: message.headers.target
+                                    value: 'OFF'
+                                    type: string
+                            - invoke:
+                                version: 2.3.0
+                                title: invoke
+                                backend-type: detect
+                                header-control:
+                                  type: blocklist
+                                  values: []
+                                parameter-control:
+                                  type: allowlist
+                                  values: []
+                                http-version: HTTP/1.1
+                                timeout: 60
+                                verb: keep
+                                chunked-uploads: true
+                                persistent-connection: true
+                                cache-response: protocol
+                                cache-ttl: 900
+                                websocket-upgrade: false
+                                target-url: >-
+                                  http://wm-is-http-webmethods.apps.itz-ycynma.infra01-lb.dal14.techzone.ibm.com/RouterRad$(api.operation.path)
+                                graphql-send-type: detect
+                            - set-variable:
+                                version: 2.0.0
+                                title: set res header core new
+                                actions:
+                                  - set: message.headers.target-core
+                                    value: new
+                                    type: string
+                        - otherwise:
+                            - throw:
+                                version: 2.1.0
+                                title: throw invalid method
+                                name: invalid method
+                                error-status-code: '405'
+                                error-status-reason: Method Not Allowed
+                                message: Only allow GET and POST
+              - otherwise:
+                  - throw:
+                      version: 2.1.0
+                      title: throw invalid core
+                      name: invalid target-core
+                      error-status-code: '500'
+                      error-status-reason: invalid target-core invalid
+                      message: please check target core bank set by gateway
+      catch: []

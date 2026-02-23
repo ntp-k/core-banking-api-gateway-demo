@@ -1,0 +1,13 @@
+kind: Product
+apiVersion: api.ibm.com/v1
+metadata:
+  name: coe-product
+  namespace: core-bank-gateway
+  version: '1.0'
+  tags: []
+  description: ''
+spec:
+  apis:
+    - $ref: core-bank-gateway:co-existence:1.0
+  plans:
+    - $ref: core-bank-gateway:default:1.0

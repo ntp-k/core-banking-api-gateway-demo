@@ -1,8 +1,8 @@
 kind: Plan
 apiVersion: api.ibm.com/v1
 metadata:
-  name: Free
-  namespace: core-banking-v2
+  name: default
+  namespace: core-bank-gateway
   version: '1.0'
   tags: []
   description: ''
